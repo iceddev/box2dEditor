@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+Copyright 2011 Luis Montes
+
+http://azprogrammer.com
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Box2D physics Editor</title>
+    <script src="scripts/Box2d.min.js"></script>
+    <script src="scripts/frozen.js.uncompressed.js"></script>
+    <script src="scripts/editor.js"></script>
+    <style>
+    body {
+      -webkit-transform: translateZ(0);
+    }
+    </style>
+  </head>
+  <body>
+   <center>
+    <canvas id="canvas" width="700" height="440" style="border: 0; background-color: #DDD"></canvas>
+    <br>Drag and drop an image into the canvas to change its size. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="xdisp"></span>,<span id="ydisp"></span>
+    </center><br>
+
+	<form id="toolForm" onsubmit="return false;">
+    rectangle<input type="radio" name="tool" value="rectangle" checked="checked">
+    &nbsp;&nbsp;&nbsp;polygon<input type="radio" name="tool" value="polygon">    
+    &nbsp;&nbsp;&nbsp;circle<input type="radio" name="tool" value="circle">
+    |
+    static<input type="radio" name="toolType" value="static" checked="checked">
+    &nbsp;&nbsp;&nbsp;dynamic<input type="radio" name="toolType" value="dynamic">    
+    &nbsp;&nbsp;&nbsp;zone<input type="radio" name="toolType" value="zone">
+    <button id="load">Load JSON</button> gravity X:<input type="text" size="3" value="0" id="gravityX"> Y:<input type="text" size="3" value="9.8" id="gravityY">
+    run simulation<input type="checkbox" checked="checked" id="runSimulation">
+    show static<input type="checkbox" checked="checked" id="showStatic">
+    <br>
+    <textarea rows="10" cols="140" id="output"></textarea>
+    </form>
+     <br>
+    Written by Luis Montes.  Follow me on twitter: <a href="http://twitter.com/monteslu" target="_blank">@monteslu</a><br><br>
+  
+  </body>
+</html>
