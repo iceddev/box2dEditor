@@ -7,102 +7,60 @@ http://azprogrammer.com
 
  */
 
- require(['scripts/convexHull', 'frozen/GameCore', 'frozen/ResourceManager', 'dojo/keys', 'frozen/utils', 'frozen/box2d/Box', 'frozen/box2d/RectangleEntity', 'frozen/box2d/PolygonEntity', 'frozen/box2d/MultiPolygonEntity', 'frozen/box2d/CircleEntity', 'scripts/DNDFileController' , 'dojo/_base/declare', 'dojo/on', 'dojo/dom', 'dojo/_base/lang', 'dojo/domReady!'],
- function(convexHull, GameCore, ResourceManager, keys, utils, Box, Rectangle, Polygon, MulitPolygon, Circle, DNDFileController, declare, on, dom, lang){
+ require(['scripts/convexHull', 'frozen/GameCore', 'frozen/ResourceManager', 'dojo/keys', 'frozen/utils', 'frozen/box2d/Box', 'frozen/box2d/RectangleEntity', 'frozen/box2d/PolygonEntity', 'frozen/box2d/MultiPolygonEntity', 'frozen/box2d/CircleEntity', 'scripts/DNDFileController' , 'dojo/on', 'dojo/dom', 'dojo/_base/lang', 'dojo/domReady!'],
+ function(convexHull, GameCore, ResourceManager, keys, utils, Box, Rectangle, Polygon, MulitPolygon, Circle, DNDFileController, on, dom, lang){
 
-
-    
-  var debug = false;
-  
-  if(localStorage && localStorage.debug == 'y'){
-    debug = true;
-  }
-  
      
-    var SCALE = 30;
-    var NULL_CENTER = {x:null, y:null};
-    var MAX_POLY_SIDES = 10;
-    var POINT_RADIUS = 4;
+  var SCALE = 30;
+  var NULL_CENTER = {x:null, y:null};
+  var MAX_POLY_SIDES = 10;
+  var POINT_RADIUS = 4;
 
-    var DYNAMIC_COLOR = 'rgba(0,255,0,0.4)';
-    var ZONE_COLOR = 'rgba(255,0,0,0.2)';
+  var DYNAMIC_COLOR = 'rgba(0,255,0,0.4)';
+  var ZONE_COLOR = 'rgba(255,0,0,0.2)';
 
-    
-    var canvas = dom.byId('canvas');
-    var gravityXField = dom.byId('gravityX');
-    var gravityYField = dom.byId('gravityY');
+  
+  var canvas = dom.byId('canvas');
+  var gravityXField = dom.byId('gravityX');
+  var gravityYField = dom.byId('gravityY');
+  var xdisp = dom.byId('xdisp');
+  var ydisp = dom.byId('ydisp');
 
-    var mouseDownPt = null;
-    var mouseMovePt = null;
-    var rm = null;
-    
-    var backImg = new Image();
-    
-    
-    //tool stuff
-    var tool = 'rectangle';
-    var toolType = 'static';
-    var currentGeom = null;
-    var xdisp,ydisp;
-    var geomId = 30;
-    var extraObjs = [];
-    var dnd;
-    //var staticBody = true;
-    var showHidden = true;
-    var runSimulation = true;
-    var showStatic = true;
-
-    var jsonObjs = [];
-    var zoneEntities = [];
-
-    var RPM = 6;
-
-    var gravity = {
-      x: parseFloat(gravityXField.value, 10),
-      y: parseFloat(gravityYField.value, 10)
-     };
-
-
-
-    
-    var zones = [];
-
-    
-    var RectangleZone = declare([Rectangle], {
-        zone: true,
-        impulseAngle: 0,
-        impulseForce: 0.5,
-        color: 'rgba(255,0,0,0.2)',
-        constructor: function(/* Object */args){
-            declare.safeMixin(this, args);
-        },
-        applyImpulse: function(entity,box){
-          box.applyImpulse(entity.id, this.impulseAngle, this.impulseForce);
-        },
-        inZone: function(entity){
-          if(entity){
-            return ((entity.x > (this.x - this.halfWidth)) && (entity.y > (this.y - this.halfHeight)) && (entity.x < (this.x + this.halfWidth)) && (entity.y < (this.y + this.halfHeight)));
-          }else{
-            return false;
-          }
-        }
-    });
-    
-    
-      
-      
-    var world = {};
-    var worker = null;
-    var bodiesState = null;
-    var box = null;
-    
-
-  var rotateVector = function(vector, radians){
-    return {
-      x: vector.x * Math.cos(radians) - vector.y * Math.sin(radians),
-      y: vector.x * Math.sin(radians) + vector.y * Math.cos(radians)
-    };
+  var gravity = {
+    x: parseFloat(gravityXField.value, 10),
+    y: parseFloat(gravityYField.value, 10)
   };
+
+
+  var mouseDownPt = null;
+  var mouseMovePt = null;
+  var rm = null;
+  
+  var backImg = new Image();
+  
+  
+  //tool stuff
+  var tool = 'rectangle';
+  var toolType = 'static';
+  var currentGeom = null;
+  var geomId = 30;
+  var extraObjs = [];
+  var dnd;
+  var showHidden = true;
+  var runSimulation = true;
+  var showStatic = true;
+
+  var jsonObjs = [];
+  var zoneEntities = [];
+
+  
+  var zones = [];
+    
+  var world = {};
+  var worker = null;
+  var bodiesState = null;
+  var box = null;
+
 
   var orderRectPts = function(pts){
     var retVal = [];
@@ -188,19 +146,6 @@ http://azprogrammer.com
 
 
   
-   
-     
-
-    
-    
-  var intersect = function (s1, s2,radiiSquared) {
-
-    var distance_squared = Math.pow(s1.x  - s2.x,2) + Math.pow(s1.y - s2.y,2);
-    //var radii_squared = 1; //Math.pow(s1.collisionRadius + s2.collisionRadius,2);
-    return distance_squared < radiiSquared;  // true if intersect
-    
-  };
-  
   var getTool = function(){
     var tools = dom.byId('toolForm').tool;
 
@@ -235,12 +180,7 @@ http://azprogrammer.com
   };
   
 
-  
-    
-
       
-      xdisp = dom.byId('xdisp');
-      ydisp = dom.byId('ydisp');
         
       
       
@@ -285,13 +225,6 @@ http://azprogrammer.com
       });
       
       
-      
-      // on(dom.byId('showHidden'), 'change', function(e){
-      //   showHidden = dom.byId('showHidden').checked;
-      // });
-
-
-
       on(dom.byId('runSimulation'), 'change', function(e){
         runSimulation = dom.byId('runSimulation').checked;
       });
@@ -407,11 +340,6 @@ http://azprogrammer.com
         //mouse released
         if(mouseDownPt && !im.mouseAction.isPressed()){
           mp = im.mouseAction.endPosition;
-          // if(tool == 'polygon'){
-          //   currentGeom = currentGeom || [];
-          //   currentGeom.push(mp);
-            
-          // }else
 
           if(tool == 'rectangle'){
             if(currentGeom && currentGeom.length ==1){
@@ -543,21 +471,7 @@ http://azprogrammer.com
         box.update(millis);
         box.updateExternalState(world);
       }
-      //var moveRadians = RPM * millis * (1/60000) * Math.PI * 2;
-      //gravity = rotateVector(gravity, moveRadians);
-      //console.log(gravity);
-      // box.setGravity(gravity);
-      // for(var id in world){
-      //   if(!world[id].staticBody){
-      //     box.wakeUpBody(id);
-      //   }
-      // }
 
-      // for(var j = 0;  j < zones.length; j++){
-      //     if(zones[j].inZone(entity)){
-      //       zones[j].applyImpulse(entity,box);
-      //     }
-      // }
     };
 
     var loadGame = function(){
@@ -569,8 +483,7 @@ http://azprogrammer.com
       });
       
       box = new Box({intervalRate:60, adaptive:false, width:game.width, height:game.height, scale:SCALE, gravityY:gravity.y, gravityX:gravity.x });
-      //box.setBodies(world);
-    
+      
       game.run();
     };
 
