@@ -23,6 +23,7 @@ http://azprogrammer.com
   var canvas = dom.byId('canvas');
   var gravityXField = dom.byId('gravityX');
   var gravityYField = dom.byId('gravityY');
+  var undoBtn = dom.byId('undoBtn');
   var xdisp = dom.byId('xdisp');
   var ydisp = dom.byId('ydisp');
 
@@ -51,10 +52,9 @@ http://azprogrammer.com
   var showStatic = true;
 
   var jsonObjs = [];
+  var undoObjs = [];
   var zoneEntities = [];
 
-  
-  var zones = [];
     
   var world = {};
   var worker = null;
@@ -222,6 +222,14 @@ http://azprogrammer.com
         }catch(er){
           console.info('error loading json',er);
         }
+      });
+
+      on(undoBtn, 'click', function(e){
+        if(jsonObjs.length){
+          undoObjs.push(jsonObjs.pop());
+          createBodies();
+        }
+
       });
       
       
@@ -489,6 +497,11 @@ http://azprogrammer.com
 
     var createBodies = function(){
       var outputStr = JSON.stringify({objs:jsonObjs});
+      if(jsonObjs.length){
+        undoBtn.disabled = false;
+      }else{
+        undoBtn.disabled = true;
+      }
       dom.byId('output').value = outputStr;
       gravity = {
         x: parseFloat(gravityXField.value, 10),
