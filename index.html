@@ -11,11 +11,6 @@ http://azprogrammer.com
     <script src="scripts/Box2d.min.js"></script>
     <script src="scripts/frozen.js.uncompressed.js"></script>
     <script src="scripts/editor.js"></script>
-    <style>
-    body {
-      -webkit-transform: translateZ(0);
-    }
-    </style>
   </head>
   <body>
    <center>
@@ -25,11 +20,11 @@ http://azprogrammer.com
 
 	<form id="toolForm" onsubmit="return false;">
     rectangle<input type="radio" name="tool" value="rectangle" checked="checked">
-    &nbsp;&nbsp;&nbsp;polygon<input type="radio" name="tool" value="polygon">    
+    &nbsp;&nbsp;&nbsp;polygon<input type="radio" name="tool" value="polygon">
     &nbsp;&nbsp;&nbsp;circle<input type="radio" name="tool" value="circle">
     |
     static<input type="radio" name="toolType" value="static" checked="checked">
-    &nbsp;&nbsp;&nbsp;dynamic<input type="radio" name="toolType" value="dynamic">    
+    &nbsp;&nbsp;&nbsp;dynamic<input type="radio" name="toolType" value="dynamic">
     &nbsp;&nbsp;&nbsp;zone<input type="radio" name="toolType" value="zone">
     <button id="load">Load JSON</button> gravity X:<input type="text" size="3" value="0" id="gravityX"> Y:<input type="text" size="3" value="9.8" id="gravityY">
     run simulation<input type="checkbox" checked="checked" id="runSimulation">
@@ -39,6 +34,6 @@ http://azprogrammer.com
     </form>
      <br>
     Written by Luis Montes.  Follow me on twitter: <a href="http://twitter.com/monteslu" target="_blank">@monteslu</a> Source available <a href="https://github.com/iceddev/box2dEditor" target="_blank">here</a>
-  
+
   </body>
 </html>
