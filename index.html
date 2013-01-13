@@ -9,8 +9,19 @@ http://azprogrammer.com
     <meta charset="utf-8">
     <title>Box2D physics Editor</title>
     <script src="scripts/Box2d.min.js"></script>
+    <script>
+      var dojoConfig = {
+        baseUrl: './',
+        packages: [
+          'frozen',
+          'scripts'
+        ]
+      }
+    </script>
     <script src="scripts/frozen.js.uncompressed.js"></script>
-    <script src="scripts/editor.js"></script>
+    <script>
+      require(['scripts/editor']);
+    </script>
   </head>
   <body>
    <center>

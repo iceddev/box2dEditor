@@ -1977,9 +1977,6 @@ define([
   return dcl(Mixer, {
     intervalRate: 60,
     adaptive: false,
-    width: 640,
-    height: 480,
-    scale: 30,
     bodiesMap: [],
     fixturesMap: [],
     world: null,
@@ -1990,7 +1987,7 @@ define([
     contactListener: null,
     collisions: null,
     constructor: function(args){
-      if(args.intervalRate){
+      if(args && args.intervalRate){
         this.intervalRate = parseInt(args.intervalRate, 10);
       }
 
@@ -2325,7 +2322,7 @@ define([
 
     /**
       * Wake up a body in the box2d world so that box2d will continue to run calculations on it.
-      * 
+      *
       *
       * This must be done outside of the update() iteration!
       *
@@ -3636,7 +3633,7 @@ define(["../has", "./config", "require", "module"], function(has, config, requir
 
 },
 'dojo/has':function(){
-define("dojo/has", ["require", "module"], function(require, module){
+define(["require", "module"], function(require, module){
 	// module:
 	//		dojo/has
 	// summary:
@@ -5828,7 +5825,7 @@ myGame.run();
 
 },
 'dojo/dom':function(){
-define(["./sniff", "./_base/window"],
+define("dojo/dom", ["./sniff", "./_base/window"],
 		function(has, win){
 	// module:
 	//		dojo/dom
@@ -6372,7 +6369,7 @@ define([
 
 },
 'dojo/on':function(){
-define("dojo/on", ["require", "./_base/kernel", "./has"], function(aspect, dojo, has){
+define(["require", "./_base/kernel", "./has"], function(aspect, dojo, has){
 
 	"use strict";
 	if( 1 ){ // check to make sure we are in a browser, this module should work anywhere
@@ -6889,7 +6886,7 @@ define("dojo/on", ["require", "./_base/kernel", "./has"], function(aspect, dojo,
 
 },
 'dojo/dom-geometry':function(){
-define(["./sniff", "./_base/window","./dom", "./dom-style"],
+define("dojo/dom-geometry", ["./sniff", "./_base/window","./dom", "./dom-style"],
 		function(has, win, dom, style){
 	// module:
 	//		dojo/dom-geometry
@@ -8172,7 +8169,7 @@ define(function(){
 });
 },
 'dojo/keys':function(){
-define(["./_base/kernel", "./sniff"], function(dojo, has){
+define("dojo/keys", ["./_base/kernel", "./sniff"], function(dojo, has){
 
 	// module:
 	//		dojo/keys

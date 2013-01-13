@@ -16,98 +16,93 @@ limitations under the License.
 
 **/
 
- /**
- * The InputManager handles DOM events for use in games.
- * @name InputManager
- * @class InputManager
- */
-define(['dojo/_base/declare', 'dojo/on', 'dojo/dom', 'dojo/dom-geometry', 'dojo/_base/lang', 'dojo/domReady!'],
-  function(declare, on, dom, domGeom, lang){
+define([
+  'dcl',
+  'dcl/bases/Mixer',
+  'dojo/_base/lang',
+  'dojo/on',
+  'dojo/dom',
+  'dojo/dom-geometry',
+  'dojo/domReady!'
+], function(dcl, Mixer, lang, on, dom, domGeom){
 
-  return declare(null, {
-      node: null, //the DOM element
-        borderStyle: null,
-        borderDropStyle : '3px dashed red',
-    
-        constructor: function(/* Object */args){
-            declare.safeMixin(this, args);
-            if(!this.node){
-              this.node = dom.byId(this.id);
-            }
-            on(this.node, 'dragenter', lang.hitch(this, "dragenter"));
-            on(this.node, 'dragover', lang.hitch(this, "dragover"));
-            on(this.node, 'dragleave', lang.hitch(this, "dragleave"));
-            on(this.node, 'drop', lang.hitch(this, "drop"));
+  'use strict';
 
-            this.borderStyle = this.node.style.border;
-        },
-        dragenter : function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          this.node.style.border = this.borderDropStyle;
-          
-        },
+  return dcl([Mixer], {
+    node: null, //the DOM element
+    borderStyle: null,
+    borderDropStyle : '3px dashed red',
 
-        dragover : function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-        },
+    constructor: function(){
+      if(!this.node){
+        this.node = dom.byId(this.id);
+      }
+      on(this.node, 'dragenter', lang.hitch(this, "dragenter"));
+      on(this.node, 'dragover', lang.hitch(this, "dragover"));
+      on(this.node, 'dragleave', lang.hitch(this, "dragleave"));
+      on(this.node, 'drop', lang.hitch(this, "drop"));
 
-        dragleave : function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-         // this.node.classList.remove('rounded');
-          this.node.style.border = this.borderStyle;
-        },
-        
-        preDrop: function(e){
-          this.node.style.border = this.borderStyle;
-          e.stopPropagation();
-          e.preventDefault();
-        
-          this.drop(e);
-        },
-        
-        drop: function (e){
-          
-          var errorCallback = function(evt) {
-                   console.log('Error code: ' + evt.target.error.code);
-          };
+      this.borderStyle = this.node.style.border;
+    },
 
-          var loadCallback = function(aFile){
-            return function(evt) {
-                    if (evt.target.readyState == FileReader.DONE) {
-                      //console.log('evt',evt);
-                      console.log('base64 length',evt.target.result.length);
-                    }
-                  };
-            };
+    dragenter : function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      this.node.style.border = this.borderDropStyle;
+    },
 
-          try{
-            
-        
-              var files = e.dataTransfer.files;
-        
-              for (var i = 0; i < files.length; i++) {
-                // FileReader
-                var reader = new FileReader();
-                console.log('file',file[i]);
-                
-                reader.onerror = errorCallback;
+    dragover : function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    },
 
-                reader.onload = loadCallback(file[i]);
-        
-                reader.readAsDataURL(file[i]);
-              }
-        
-              return false;
-            
-            
-          }catch(dropE){
-            console.log('DnD error',dropE);
+    dragleave : function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      this.node.style.border = this.borderStyle;
+    },
+
+    preDrop: function(e){
+      this.node.style.border = this.borderStyle;
+      e.stopPropagation();
+      e.preventDefault();
+
+      this.drop(e);
+    },
+
+    drop: function (e){
+      var errorCallback = function(evt) {
+         console.log('Error code: ' + evt.target.error.code);
+      };
+
+      var loadCallback = function(aFile){
+        return function(evt) {
+          if (evt.target.readyState == FileReader.DONE) {
+            console.log('base64 length',evt.target.result.length);
           }
-          
+        };
+      };
+
+      try {
+        var files = e.dataTransfer.files;
+
+        for (var i = 0; i < files.length; i++) {
+          // FileReader
+          var reader = new FileReader();
+          console.log('file', files[i]);
+
+          reader.onerror = errorCallback;
+
+          reader.onload = loadCallback(files[i]);
+
+          reader.readAsDataURL(files[i]);
         }
+
+        return false;
+      } catch(dropE){
+        console.log('DnD error',dropE);
+      }
+    }
   });
 
 });
